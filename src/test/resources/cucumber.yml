@@ -1,0 +1,21 @@
+prod:
+  userEmail: "mobileVDQA@ltqa.lambdatestautomation.com"
+  userPass: "mobileVDQA"
+  userName: "mlqa"
+  userAccessKey: "V9U5wN8ao7wTGsY5JPfSvwBh5R7MAknLOZkgVGfNO3J4nNGmvp"
+  seleniumGridURL: "@hub.lambdatest.com/wd/hub"
+  apiBaseUrl: "mobile-api.lambdatest.com"
+  xcuiBaseUrl: "mobile-api.lambdatest.com"
+  s3Bucket: "prod-realdevice-mobile-artifacts-v1"
+  orgId: "orgId-1623385"
+
+stage:
+  userEmail: "mobileVDQA@ltqa.lambdatestautomation.com"
+  userPass: "mobileVDQA"
+  userName: "mlqa"
+  userAccessKey: "Rq0rPTC67zbxxeT1hkEdAkImkXzmtZzBvm2aAb327jUubWRkwP"
+  seleniumGridURL: "@stage-hub.lambdatestinternal.com/wd/hub"
+  apiBaseUrl: "mobile-api.lambdatest.com"
+  xcuiBaseUrl: "mobile-api.lambdatest.com"
+  s3Bucket: "prod-realdevice-mobile-artifacts-v1"
+  orgId: "orgId-1623385"

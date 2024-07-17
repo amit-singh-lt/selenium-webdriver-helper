@@ -1,0 +1,29 @@
+Configuration:
+  status: info
+  name: Default
+  packages: "com.epam.ta.reportportal.log4j.appender"
+
+  Appenders:
+    Console:
+      name: ConsoleAppender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{2} - %msg%n"
+
+    File:
+      name: FileAppender
+      fileName: logs/tests.log
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{2} - %msg%n"
+
+    ReportPortalLog4j2Appender:
+      name: ReportPortalAppender
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{2} - %msg%n"
+
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: FileAppender
+        - ref: ReportPortalAppender
