@@ -24,6 +24,8 @@ hs_err_pid*
 replay_pid*
 
 # QA Selenium Automation
-.idea/sonarlint
+.idea
+.DS_Store
+dependency-reduced-pom.xml
 target
 lambdatest-selenium-webdriver-helper.iml

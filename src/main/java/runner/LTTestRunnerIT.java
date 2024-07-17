@@ -3,6 +3,7 @@ package runner;
 import com.epam.reportportal.listeners.ListenerParameters;
 import com.epam.reportportal.service.Launch;
 import hooks.Hooks;
+import io.cucumber.core.cli.Main;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +15,9 @@ import utility.Constant;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import static com.epam.reportportal.cucumber.AbstractReporter.ITEM_TREE;
@@ -22,7 +26,7 @@ import static java.util.Optional.ofNullable;
 
 @CucumberOptions(
         features = { "src/test/resources/features" },
-        glue = { "stepDefinitions", "hooks" },
+        glue = {"stepdefinitions", "hooks"},
         plugin = {
                 "pretty",
                 "rerun:rerun/failed_scenarios.txt",
@@ -30,29 +34,41 @@ import static java.util.Optional.ofNullable;
         }
 )
 public class LTTestRunnerIT extends AbstractTestNGCucumberTests {
-  private final Logger ltLogger = LogManager.getLogger(LTTestRunnerIT.class);
+  private static final Logger ltLogger = LogManager.getLogger(LTTestRunnerIT.class);
 
   public static void main(String[] args) {
-
-    System.setProperty("ENV", "prod");
-    System.setProperty("suiteXmlFile", "testng.xml");
-    System.setProperty("PARALLEL", "1");
-
-    out.println("Running Jar File...");
-
-    String[] cucumberOptions = new String[]{
+    List<String> cucumberOptions = new ArrayList<>(Arrays.asList(
       "src/test/resources/features",
-
-      "-g", "stepDefinitions",
+      "-g", "stepdefinitions",
       "-g", "hooks",
-
-      "-t", "@androidDevicesRegression",
-
       "-p", "pretty",
       "-p", "rerun:rerun/failed_scenarios.txt",
       "-p", "com.epam.reportportal.cucumber.ScenarioReporter"
-    };
-    io.cucumber.core.cli.Main.main(cucumberOptions);
+    ));
+    setProperty("cucumber.publish.quiet", "true");
+    for (String arg : args) {
+      if (arg.startsWith("-DCUCUMBER_FILTER_TAGS=")) {
+        String tags = arg.substring("-DCUCUMBER_FILTER_TAGS=".length());
+        cucumberOptions.add("-t");
+        cucumberOptions.add(tags);
+      } else if (arg.startsWith("-D")) {
+        String[] keyValue = arg.substring(2).split("=", 2);
+        if (keyValue.length == 2) {
+          setProperty(keyValue[0], keyValue[1]);
+        } else {
+          ltLogger.error("Invalid system property format :- {}", arg);
+        }
+      } else {
+        cucumberOptions.add(arg);
+      }
+    }
+
+    ltLogger.info("Running Cucumber with options: ");
+    for (String option : cucumberOptions) {
+      ltLogger.info(option);
+    }
+
+    Main.main(cucumberOptions.toArray(new String[0]));
   }
 
   public LTTestRunnerIT() {

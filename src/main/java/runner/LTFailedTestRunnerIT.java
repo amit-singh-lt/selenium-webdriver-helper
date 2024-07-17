@@ -22,7 +22,7 @@ import static java.util.Optional.ofNullable;
 
 @CucumberOptions (
 		features = { "@rerun/failed_scenarios.txt" },
-		glue = { "stepDefinitions", "hooks" },
+		glue = {"stepdefinitions", "hooks"},
 		monochrome = true,
 		plugin = {
 				"pretty",

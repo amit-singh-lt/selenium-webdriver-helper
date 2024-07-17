@@ -1,4 +1,4 @@
-package stepDefinitions;
+package stepdefinitions;
 
 public class SessionArtifactsStepDefinition {
 //    @Then("^User verify (video|test logs|appium logs|network logs|device logs) via API$")
