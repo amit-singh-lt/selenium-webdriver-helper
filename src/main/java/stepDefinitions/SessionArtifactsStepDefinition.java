@@ -1,66 +1,43 @@
 package stepdefinitions;
 
+import artifacts.SessionDetails;
+import artifacts.Artifacts;
+import helper.APIHelper;
+import io.cucumber.java.en.Then;
+import io.restassured.response.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import utility.Constant;
+import utility.EnvSetup;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class SessionArtifactsStepDefinition {
-//    @Then("^User verify (video|test logs|appium logs|network logs|device logs) via API$")
-//    public void verifyTestSessionMetadata(String metadata) {
-//        CustomSoftAssert softAssert = EnvSetup.SOFT_ASSERT.get();
-//        EnvSetup.LOGGER_THREAD_LOCAL.get().info("I verify \"{}\" via API", metadata);
-//        TestMetaDataBase.setSessionID(EnvSetup.SESSION_ID_THREAD_LOCAL.get());
-//        try {
-//            switch (metadata) {
-//                case "video" -> VerifyVideo.verifyTestVideo();
-//                case "test logs" -> VerifyTestLog.verifyTestLogs();
-//                case "appium logs" -> VerifyAppiumLog.verifyAppiumLogs();
-//                case "network logs" -> VerifyNetworkLog.verifyNetworkLogs();
-//                case "device logs" -> VerifyDeviceLog.verifyDeviceLogs();
-//                case "visual screenshot" -> VerifyVisualScreenshot.verifyVisualScreenshot();
-//            }
-//        } catch (Exception e) {
-//            EnvSetup.LOGGER_THREAD_LOCAL.get().error("Exception came while verifying [{}]", metadata.toUpperCase());
-//            EnvSetup.LOGGER_THREAD_LOCAL.get().error(e);
-//            setHookErrorStatusMessage(metadata + " verification");
-//            softAssert.assertTrue(false, String.format("Exception came while verifying [%s]", metadata.toUpperCase()) + Constants.NEW_LINE + String.format("Exception :- %s", e));
-//        }
-//        EnvSetup.SOFT_ASSERT.set(softAssert);
-//    }
-//
-//    @Then("User verifies all artifacts via API")
-//    public void verifyAllArtifactsViaAPI() {
-//
-//
-//        try {
-//            verifyTestSessionMetadata("test logs");
-//        } catch(Exception e) {
-//            EnvSetup.LOGGER_THREAD_LOCAL.get().error("test logs verification failed");
-//            setHookErrorStatusMessage("test logs verification");
-//        }
-//
-//        try {
-//            verifyTestSessionMetadata("appium logs");
-//        } catch(Exception e) {
-//            EnvSetup.LOGGER_THREAD_LOCAL.get().error("appium logs failed");
-//            setHookErrorStatusMessage("appium logs verification");
-//        }
-//
-//        try {
-//            verifyTestSessionMetadata("network logs");
-//        } catch(Exception e) {
-//            EnvSetup.LOGGER_THREAD_LOCAL.get().error("network logs failed");
-//            setHookErrorStatusMessage("network logs verification");
-//        }
-//
-//        try {
-//            verifyTestSessionMetadata("device logs");
-//        } catch(Exception e) {
-//            EnvSetup.LOGGER_THREAD_LOCAL.get().error("device logs failed");
-//            setHookErrorStatusMessage("device logs verification");
-//        }
-//
-//        try {
-//            verifyTestSessionMetadata("visual screenshot");
-//        } catch(Exception e) {
-//            EnvSetup.LOGGER_THREAD_LOCAL.get().error("visual screenshots failed");
-//            setHookErrorStatusMessage("visual screenshot verification");
-//        }
-//    }
+    private final Logger ltLogger = LogManager.getLogger(SessionArtifactsStepDefinition.class);
+    String sessionId = null;
+    APIHelper api = new APIHelper();
+    Response sessionDetailsResponse;
+
+    // https://api.lambdatest.com/api/v1/test/<sessionId>
+    @Then("User gets Test Details using Session ID")
+    public void verifyAllArtifactsViaAPI() {
+        SessionDetails sessionDetails = new SessionDetails();
+        if(sessionId == null) {
+            sessionId = EnvSetup.SELENIUM_TEST_DRIVER_SESSION_ID_THREAD_LOCAL.get();
+        }
+        String sessionDetailsUri = sessionDetails.getSessionDetailUri(sessionId);
+        Map<String, Object> headers = new HashMap<>();
+        headers.put(Constant.AUTHORIZATION, "Basic " + EnvSetup.config.get("base64"));
+        sessionDetailsResponse = api.httpMethod(Constant.GET, sessionDetailsUri, null, null, headers, null, 200);
+        String sessionDetailsResponsePreetyPrint = sessionDetailsResponse.asString();
+        ltLogger.info("Response is :- {}", sessionDetailsResponsePreetyPrint);
+    }
+
+    @Then("User verifies all artifacts via API")
+    public void verifyVideoViaAPI() {
+        Artifacts artifacts = new Artifacts();
+        artifacts.checkVideo();
+        artifacts.checkCommandLogs();
+    }
 }

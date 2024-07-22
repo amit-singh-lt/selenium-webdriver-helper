@@ -11,34 +11,34 @@ public class TestActions extends AutomationHelper {
         CustomSoftAssert softAssert = EnvSetup.SOFT_ASSERT.get();
         boolean isTestActionPassed = false;
         String testActionFailedMessage = null;
-        int retries = 1;
+        int maxRetriesOnFailure = 2;
         switch (testAction) {
             case "local":
-                isTestActionPassed = base.retry(retries, this::localTunnelTestAction);
+                isTestActionPassed = base.retry(maxRetriesOnFailure, this::localTunnelTestAction);
                 testActionFailedMessage = "Local Tunnel";
                 break;
             case "consoleLog":
-                isTestActionPassed = base.retry(retries, this::consoleLogTestAction);
+                isTestActionPassed = base.retry(maxRetriesOnFailure, this::consoleLogTestAction);
                 testActionFailedMessage = "Console Log";
                 break;
             case "networkLog":
-                isTestActionPassed = base.retry(retries, this::networkLogTestAction);
+                isTestActionPassed = base.retry(maxRetriesOnFailure, this::networkLogTestAction);
                 testActionFailedMessage = "Network Log";
                 break;
             case "badSsl":
-                isTestActionPassed = base.retry(retries, this::badSslTestAction);
+                isTestActionPassed = base.retry(maxRetriesOnFailure, this::badSslTestAction);
                 testActionFailedMessage = "Bad SSL";
                 break;
             case "basicAuth":
-                isTestActionPassed = base.retry(retries, this::basicAuthTestAction);
+                isTestActionPassed = base.retry(maxRetriesOnFailure, this::basicAuthTestAction);
                 testActionFailedMessage = "Basic Auth";
                 break;
             default:
                 break;
         }
         if (!isTestActionPassed) {
-            ltLogger.error("{} test action verification failed after {} retries", testActionFailedMessage, retries);
-            softAssert.fail(String.format("%s test action verification failed after %s retries", testActionFailedMessage, retries));
+            ltLogger.error("{} test action verification failed after {} retries", testActionFailedMessage, maxRetriesOnFailure);
+            softAssert.fail(String.format("%s test action verification failed after %s retries", testActionFailedMessage, maxRetriesOnFailure));
         }
         EnvSetup.SOFT_ASSERT.set(softAssert);
     }

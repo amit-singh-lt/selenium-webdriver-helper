@@ -1,5 +1,6 @@
 package utility;
 
+import io.cucumber.messages.internal.com.google.gson.Gson;
 import lombok.SneakyThrows;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,17 +8,17 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Base extends WaitConstant {
     private final Logger ltLogger = LogManager.getLogger(Base.class);
 
-    public boolean retry(int maxTries, Runnable r) {
+    public boolean retry(int maxRetriesOnFailure, Runnable r) {
         int tries = 0;
-        while (tries < maxTries) {
+        while (tries < maxRetriesOnFailure) {
             try {
-                ltLogger.info("TRIES {}/{}", tries + 1, maxTries);
+                ltLogger.info("TRIES {}/{}", tries + 1, maxRetriesOnFailure);
                 r.run();
                 return true;
             } catch (Exception e) {
@@ -28,17 +29,12 @@ public class Base extends WaitConstant {
         return false;
     }
 
-    public Random newRandom() {
-        return new Random();
+    public static String generateBase64EncodedAuthToken(String userName, String passWord) {
+        return Base64.getEncoder().encodeToString((userName + ":" + passWord).getBytes());
     }
 
-    public void waitForTime(int sleepInSeconds) {
-        try {
-            TimeUnit.SECONDS.sleep(sleepInSeconds);
-        } catch (InterruptedException e) {
-            ltLogger.error("Error occurred in sleep method");
-            Thread.currentThread().interrupt();
-        }
+    public Random newRandom() {
+        return new Random();
     }
 
     public String getRandomAlphaNumericString(int size) {

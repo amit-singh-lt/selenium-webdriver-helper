@@ -11,11 +11,10 @@ public class Constant {
     // TUNNEL
     protected static final String TUNNEL_DIRECTORY = "./src/main/resources/tunnel/";
     protected static final String TUNNEL_LOG_DIRECTORY = "/logs/tunnel/";
-
     protected static final String TUNNEL_DIRECTORY_MAC = TUNNEL_DIRECTORY + "LT_Mac";
     protected static final String TUNNEL_DIRECTORY_WINDOWS = TUNNEL_DIRECTORY + "LT_Win";
     protected static final String TUNNEL_DIRECTORY_LINUX = TUNNEL_DIRECTORY + "LT_Linux";
-    protected static final String[] TUNNEL_MODES = new String[] { "tcp", "ssh" };
+    protected static final String[] TUNNEL_MODES = new String[]{"tcp", "ssh"};
     public static final String TUNNEL_STAGE_DOMAIN = " --server-domain stage-ts.lambdatestinternal.com";
 
 
@@ -30,13 +29,14 @@ public class Constant {
     // HTTP REQUEST TYPE
     public static final String HTTPS = "https://";
     public static final String HTTP = "http://";
-    protected static final String GET = "GET";
-    protected static final String GET_REDIRECT = "GET_REDIRECT";
-    protected static final String GET_WITHOUT_STATUS_CODE_VERIFICATION = "GET_WITHOUT_STATUS_CODE_VERIFICATION";
-    protected static final String POST = "POST";
-    protected static final String PUT = "PUT";
-    protected static final String PATCH = "PATCH";
-    protected static final String DELETE = "DELETE";
+    public static final String GET = "GET";
+    public static final String GET_REDIRECT = "GET_REDIRECT";
+    public static final String GET_WITHOUT_STATUS_CODE_VERIFICATION = "GET_WITHOUT_STATUS_CODE_VERIFICATION";
+    public static final String POST = "POST";
+    public static final String PUT = "PUT";
+    public static final String PATCH = "PATCH";
+    public static final String DELETE = "DELETE";
+    public static final String AUTHORIZATION = "Authorization";
 
 
     // URLs
@@ -55,14 +55,15 @@ public class Constant {
     protected static String shopLegoUrl = "http://shop.lego.com/";
     protected static String rakuTenUrl = "https://www.rakuten.com/";
     protected static String saksFifthAvenueUrl = "https://www.saksfifthavenue.com/";
-    protected static String[] networkUrls = { rttLambdaTestInternalUrl, bhPhotoVideoUrl, iHerbUrl, toySRusUrl, yoOxUrl, pmUrl, marksAndSpencerUrl, backCountryUrl, mangoUrl, abeBooksUrl, shopLegoUrl, rakuTenUrl, saksFifthAvenueUrl };
+    protected static String[] networkUrls = {rttLambdaTestInternalUrl, bhPhotoVideoUrl, iHerbUrl, toySRusUrl, yoOxUrl, pmUrl, marksAndSpencerUrl, backCountryUrl, mangoUrl, abeBooksUrl, shopLegoUrl, rakuTenUrl, saksFifthAvenueUrl};
     protected static String selfSignedUrl = "https://self-signed.badssl.com/";
     protected static String expiredUrl = "https://expired.badssl.com/";
     protected static String wrongHostUrl = "https://wrong.host.badssl.com/";
     protected static String untrustedRootUrl = "https://untrusted-root.badssl.com/";
-    protected static String[] badSslUrls = { selfSignedUrl, expiredUrl, wrongHostUrl, untrustedRootUrl };
+    protected static String[] badSslUrls = {selfSignedUrl, expiredUrl, wrongHostUrl, untrustedRootUrl};
     protected static String internetHerokuAppBasicAuthUrl = "https://admin:admin@the-internet.herokuapp.com/basic_auth";
     protected static String authenticationTestHttpAuthUrl = "https://user:pass@authenticationtest.com/HTTPAuth/";
+
 
     // CONSTANTS
     protected static String consoleMsg = "javascript console log is working fine";
@@ -80,12 +81,14 @@ public class Constant {
     protected static String shopLegoTitle = "Home | Official LEGO® IN";
     protected static String rakuTenTitle = "Online Coupons & Cash Back | Shop 3,500+ Stores! | Rakuten";
     protected static String saksFifthAvenueTitle = "Luxury Fashion & Designer Clothing, Shoes, Handbags & More | Saks Fifth Avenue";
-    protected static String[] networkUrlsTitle = { rttLambdaTestInternalTitle, bhPhotoVideoTitle, iHerbTitle, toySRusTitle, yoOxTitle, pmTitle, marksAndSpencerTitle, backCountryTitle, mangoTitle, abeBooksTitle, shopLegoTitle, rakuTenTitle, saksFifthAvenueTitle };
+    protected static String[] networkUrlsTitle = {rttLambdaTestInternalTitle, bhPhotoVideoTitle, iHerbTitle, toySRusTitle, yoOxTitle, pmTitle, marksAndSpencerTitle, backCountryTitle, mangoTitle, abeBooksTitle, shopLegoTitle, rakuTenTitle, saksFifthAvenueTitle};
     protected static String selfSignedH1 = "self-signed.badssl.com";
     protected static String expiredH1 = "expired.badssl.com";
     protected static String wrongHostH1 = "wrong.host.badssl.com";
     protected static String untrustedRootH1 = "untrusted-root.badssl.com";
-    protected static String[] badSslUrlsTitle = { selfSignedH1, expiredH1, wrongHostH1, untrustedRootH1 };
+    protected static String[] badSslUrlsTitle = {selfSignedH1, expiredH1, wrongHostH1, untrustedRootH1};
     protected static String internetHerokuAppBasicAuthUrlH3 = "Basic Auth";
     protected static String authenticationTestHttpAuthUrlH1 = "Login Success";
+
+    protected static String chromeOptions = "goog:chromeOptions";
 }

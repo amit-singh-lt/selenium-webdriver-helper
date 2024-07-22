@@ -4,9 +4,13 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.MutableCapabilities;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,23 +28,31 @@ public class CapabilitiesHelper extends WaitConstant {
      */
     public Map<String, Object> getHashMapFromString(String[] capabilitiesArrayPair) {
         Map<String, Object> ltOptions = new HashMap<>();
+        Map<String, Object> customCapsMaps = new HashMap<>();
 
         for (String pair : capabilitiesArrayPair) {
             String[] keyValue = pair.split("=");
             if (keyValue.length < 2) {
-                ltLogger.warn("Either key or Value is missing and the length is 2, hence skipping this iteration");
+                ltLogger.warn("Either key or Value is missing and the length is !2, hence skipping this iteration");
                 continue;
             }
 
-            String parameter = keyValue[0].trim();
+            String key = keyValue[0].trim();
             String value = keyValue[1].trim();
-            if (parameter.equalsIgnoreCase("tunnel") && value.equalsIgnoreCase("true")) {
+
+            if (key.equalsIgnoreCase("tunnel") && value.equalsIgnoreCase("true")) {
                 ltOptions.put("tunnel", true); // tunnel
                 ltOptions.put("tunnelName", EnvSetup.TUNNEL_NAME_THREAD_LOCAL.get());
+            } else if (key.equalsIgnoreCase(chromeOptions)) {
+//                ltOptions.put(chromeOptions, addChromeOptions(value));
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("--no-sandbox");
+                customCapsMaps.put("goog:chromeOptions", chromeOptions.getCapability("goog:chromeOptions"));
+                ltOptions.putAll(customCapsMaps);
             } else if (TRUE_STRING.equalsIgnoreCase(value) || FALSE_STRING.equalsIgnoreCase(value)) {
-                ltOptions.put(parameter, Boolean.parseBoolean(value)); // boolean capabilities
+                ltOptions.put(key, Boolean.parseBoolean(value)); // boolean capabilities
             } else {
-                ltOptions.put(parameter, value); // others
+                ltOptions.put(key, value); // others
             }
         }
 
@@ -59,14 +71,14 @@ public class CapabilitiesHelper extends WaitConstant {
         String cliCaps = System.getProperty("CAPS", "");
         if (cliCaps.contains("=")) {
             ltLogger.info("Caps passed from CLI :- {}", cliCaps);
-            capabilities = capabilities + "," + cliCaps;
+            capabilities = capabilities + ";" + cliCaps;
         } else {
             if (capabilities == null || capabilities.isEmpty()) {
                 ltLogger.warn("userCapability received in parameter is null, and returning empty lt:options response.");
                 return Collections.emptyMap();
             }
         }
-        caps = getHashMapFromString(capabilities.split(","));
+        caps = getHashMapFromString(capabilities.split(";"));
         EnvSetup.LT_OPTIONS_THREAD_LOCAL.set(caps);
         return caps;
     }
@@ -84,6 +96,35 @@ public class CapabilitiesHelper extends WaitConstant {
         ltLogger.error("[DRIVER CREATION ERROR] Driver was not created");
         ltLogger.error(e);
         throw new Exception("[DRIVER CREATION ERROR] Driver was not created" + NEW_LINE + "Exception :- " + e + NEW_LINE + "Capabilities :- " + EnvSetup.LT_OPTIONS_THREAD_LOCAL.get() + NEW_LINE);
+    }
+
+
+    public ChromeOptions addChromeOptions(String options) {
+        ChromeOptions chromeOptions = new ChromeOptions();
+
+        String[] argumentsArray = options.split(",");
+        for (String argument : argumentsArray) {
+            ltLogger.info("Chrome Options Pair is :- {}", argument);
+
+            if (argument.contains("=")) {
+                String[] keyValue = argument.split("=");
+                if (keyValue.length < 2) {
+                    ltLogger.warn("Either key or Value in CHROME_OPTIONS is missing and the length is !2, hence skipping this iteration");
+                    continue;
+                }
+
+                String key = keyValue[0].trim();
+                String value = keyValue[1].trim();
+
+                ltLogger.info("For Chrome Options Pair :- {}, Key is :- {}, and Value is :- {}", argument, key, value);
+
+                chromeOptions.addArguments("--" + key + "=" + value);
+            } else {
+                chromeOptions.addArguments("--" + argument);
+            }
+        }
+        ltLogger.info("goog:chromeOptions passed in Capabilities are :- {}", chromeOptions);
+        return chromeOptions;
     }
 
 
@@ -111,6 +152,7 @@ public class CapabilitiesHelper extends WaitConstant {
             ltLogger.info("Driver Creation Time :- {} seconds", EnvSetup.SELENIUM_DRIVER_CREATION_TIME_THREAD_LOCAL.get());
             String sessionId = testDriver.getSessionId().toString();
             ltLogger.info("Session ID :- {}", sessionId);
+            EnvSetup.SELENIUM_TEST_DRIVER_SESSION_ID_THREAD_LOCAL.set(sessionId);
             testDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SHORT_WAIT_TIME));
             testDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(LONG_WAIT_TIME));
             String platformName = EnvSetup.LT_OPTIONS_THREAD_LOCAL.get().get("platformName").toString();
@@ -138,5 +180,40 @@ public class CapabilitiesHelper extends WaitConstant {
         } else {
             ltLogger.error("Driver object received is null");
         }
+    }
+
+
+    public MutableCapabilities capabilitiesEmulatorWebDriver() {
+        MutableCapabilities caps = new MutableCapabilities();
+        MutableCapabilities sauceOptions = new MutableCapabilities();
+        caps.setCapability("platformName", "Android");
+        caps.setCapability("browserName", "Chrome");
+        caps.setCapability("appium:deviceName", "Google Pixel 4 GoogleAPI Emulator");
+        caps.setCapability("appium:platformVersion", "14.0");
+        caps.setCapability("appium:automationName", "UiAutomator2");
+        sauceOptions.setCapability("appiumVersion", "2.11.0");
+        sauceOptions.setCapability("username", EnvSetup.USER_NAME);
+        sauceOptions.setCapability("accessKey", EnvSetup.USER_ACCESS_KEY);
+        sauceOptions.setCapability("build", "SauceLab Build");
+        sauceOptions.setCapability("name", "SauceLab Test");
+        sauceOptions.setCapability("deviceOrientation", "PORTRAIT");
+        caps.setCapability("sauce:options", sauceOptions);
+        return caps;
+    }
+
+    public RemoteWebDriver driverCreateSauceLab() throws MalformedURLException, URISyntaxException {
+        MutableCapabilities caps = capabilitiesEmulatorWebDriver();
+        URI uri = new URI(EnvSetup.GRID_URL);
+        ltLogger.info("URI :- {}", uri);
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        RemoteWebDriver testDriver = new RemoteWebDriver(uri.toURL(), caps);
+        stopWatch.stop();
+        EnvSetup.SELENIUM_TEST_DRIVER_THREAD_LOCAL.set(testDriver);
+        EnvSetup.SELENIUM_DRIVER_CREATION_TIME_THREAD_LOCAL.set((int) stopWatch.getTime(TimeUnit.SECONDS));
+        ltLogger.info("Driver Creation Time :- {} seconds", EnvSetup.SELENIUM_DRIVER_CREATION_TIME_THREAD_LOCAL.get());
+        String sessionId = testDriver.getSessionId().toString();
+        ltLogger.info("Session ID :- {}", sessionId);
+        return testDriver;
     }
 }
