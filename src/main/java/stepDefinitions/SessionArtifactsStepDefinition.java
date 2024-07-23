@@ -34,10 +34,18 @@ public class SessionArtifactsStepDefinition {
         ltLogger.info("Response is :- {}", sessionDetailsResponsePreetyPrint);
     }
 
-    @Then("User verifies all artifacts via API")
-    public void verifyVideoViaAPI() {
+    @Then("^User verifies (all|video|commandLogs) artifacts via API$")
+    public void verifyVideoViaAPI(String what) {
         Artifacts artifacts = new Artifacts();
-        artifacts.checkVideo();
-        artifacts.checkCommandLogs();
+        switch (what) {
+            case "video":
+                artifacts.checkVideo();
+                break;
+            case "commandLogs":
+                artifacts.checkCommandLogs();
+                break;
+            default:
+                break;
+        }
     }
 }

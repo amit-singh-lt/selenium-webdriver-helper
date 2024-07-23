@@ -15,7 +15,8 @@ Feature: Automation product regression for android devices
     Then User stops tunnel
     And User quits selenium driver
     Then User gets Test Details using Session ID
-    Then User verifies all artifacts via API
+    Then User verifies video artifacts via API
+    Then User verifies commandLogs artifacts via API
 
     Examples:
       | capabilities                                                                                              |

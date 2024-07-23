@@ -51,7 +51,7 @@ public class Artifacts extends Constant {
 
     public void checkCommandLogs() {
         List<String> command = new ArrayList<>();
-        command.add(System.getProperty(Constant.USER_DIR) + "/bash/commandLogs.sh");
+        command.add(System.getProperty(Constant.USER_DIR) + "/bash/command_logs.sh");
         command.add(EnvSetup.SELENIUM_TEST_DRIVER_SESSION_ID_THREAD_LOCAL.get());
         command.add(EnvSetup.USER_NAME);
         command.add(EnvSetup.USER_ACCESS_KEY);
