@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2059
 
 # Configuration
 API_BASE_URL="api.lambdatest.com/automation/api/v1/sessions"
@@ -29,6 +30,7 @@ fetch_video_data() {
     local user_name="$2"
     local access_key="$3"
     local video_url
+
     # Format the video URL using provided user credentials and session ID
     video_url=$(printf "$VIDEO_URL_FORMAT" "$user_name" "$access_key" "$API_BASE_URL" "$session_id")
     log_message "Fetching video data from URL: $video_url"
