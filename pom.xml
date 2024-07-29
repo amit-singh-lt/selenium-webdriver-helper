@@ -4,9 +4,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.lambdatest.qa</groupId>
-  <artifactId>com.lambdatest.qa</artifactId>
+  <groupId>io.github.amit-singh-lt</groupId>
+  <artifactId>amit-singh-lt</artifactId>
   <version>0.0.1</version>
+  <packaging>jar</packaging>
 
   <repositories>
     <repository>
@@ -17,19 +18,17 @@
       <name>bintray</name>
       <url>http://dl.bintray.com/epam/reportportal</url>
     </repository>
-    <repository>
-      <id>opencv</id>
-      <name>opencv</name>
-      <url>https://clojars.org/repo/</url>
-    </repository>
   </repositories>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <tunnel.version>LATEST</tunnel.version>
-  </properties>
-
   <dependencies>
+
+    <!-- https://central.sonatype.com/artifact/io.github.amit-singh-lt/amit-singh-lt -->
+    <dependency>
+      <groupId>io.github.amit-singh-lt</groupId>
+      <artifactId>amit-singh-lt</artifactId>
+      <version>0.0.1</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.testng/testng -->
     <dependency>
       <groupId>org.testng</groupId>
@@ -173,8 +172,10 @@
     </dependency>
 
   </dependencies>
+
   <build>
     <plugins>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -186,40 +187,6 @@
             <arg>-Xlint:-options</arg>
           </compilerArgs>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.4</version>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/classes</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${basedir}</directory>
-                  <includes>
-                    <include>**/*</include>
-                  </includes>
-                  <excludes>
-                    <exclude>idea/**</exclude>
-                    <exclude>logs/**</exclude>
-                    <exclude>target/**</exclude>
-                    <exclude>.git/**</exclude>
-                    <exclude>**/.gitignore</exclude>
-                    <exclude>pom.xml</exclude>
-                  </excludes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
 
       <plugin>
@@ -248,28 +215,6 @@
             </manifest>
           </archive>
         </configuration>
-      </plugin>
-
-      <!-- Create a jar with dependencies -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>runner.LTTestRunnerIT</mainClass>
-                </transformer>
-              </transformers>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

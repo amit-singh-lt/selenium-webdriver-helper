@@ -3,6 +3,7 @@
 <suite name="Suite" data-provider-thread-count="1" >
     <listeners>
         <listener class-name="listeners.SuiteAlterListener"/>
+        <listener class-name="listeners.GlobalTimeoutListener"/>
     </listeners>
     <test name="Test">
         <classes>

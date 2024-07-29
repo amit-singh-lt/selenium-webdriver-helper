@@ -7,7 +7,7 @@ import utility.EnvSetup;
 public class AssertStepDefinition {
     @Then("^Initialize soft assert$")
     public void initializeSoftAssert() {
-        CustomSoftAssert initializeSoftAssert = new CustomSoftAssert();
-        EnvSetup.SOFT_ASSERT.set(initializeSoftAssert);
+        CustomSoftAssert softAssert = new CustomSoftAssert();
+        EnvSetup.SOFT_ASSERT.set(softAssert);
     }
 }

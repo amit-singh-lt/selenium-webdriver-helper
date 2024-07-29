@@ -2,7 +2,6 @@ package runner;
 
 import com.epam.reportportal.listeners.ListenerParameters;
 import com.epam.reportportal.service.Launch;
-import hooks.Hooks;
 import io.cucumber.core.cli.Main;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
@@ -100,7 +99,7 @@ public class LTTestRunnerIT extends AbstractTestNGCucumberTests {
 
   @BeforeSuite
   public void initializeReportPortalParameters() {
-    try (InputStream input = Hooks.class.getClassLoader().getResourceAsStream("reportportal.properties")) {
+    try (InputStream input = LTTestRunnerIT.class.getClassLoader().getResourceAsStream("reportportal.properties")) {
       if (input == null) {
         ltLogger.error("Sorry, unable to find reportportal.properties");
         return;

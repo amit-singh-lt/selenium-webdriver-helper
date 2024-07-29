@@ -10,7 +10,7 @@ import java.util.Map;
 public class CapabilitiesStepDefinition extends CapabilitiesHelper {
     private RemoteWebDriver testDriver;
 
-    @Then("^User create selenium driver with capabilities as ([a-zA-Z0-9_=,;:.+\\- ]+)$")
+    @Then("^User create selenium driver with capabilities as ([a-zA-Z0-9_=,;:{}\".+\\- ]+)$")
     public void featureFileCapabilities(String capabilities) throws Exception {
         Map<String, Object> mapCapabilities = appendDynamicCapability(capabilities);
         testDriver = driverCreate(mapCapabilities);
